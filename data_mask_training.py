@@ -44,14 +44,14 @@ def train_model(train_generator, validation_generator, file_output="models/nonam
 # Main
 root_path = 'data/data_build'
 data_generator = [
-    get_oben_data_generator,
-    get_seite_data_generator,
+    # get_oben_data_generator,
+    # get_seite_data_generator,
     get_unter_data_generator
 ]
 
 data_generator_name = [
-    "models/oben.hdf5",
-    "models/seite.hdf5",
+    # "models/oben.hdf5",
+    # "models/seite.hdf5",
     "models/unter.hdf5",
 ]
 

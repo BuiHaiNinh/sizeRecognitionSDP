@@ -11,6 +11,7 @@ class DataGenerator(keras.utils.Sequence):
         self.n = 1
         self.shuffle = shuffle
         self.indexes = np.arange(len(self.x))
+        self.img_preprocess = lambda x: x
 
     def __len__(self):
         return int(np.floor(len(self.x) / self.batch_size))
@@ -27,6 +28,7 @@ class DataGenerator(keras.utils.Sequence):
         def img_read(path):
             img = imread(path)
             img = normalize(img)
+            img = self.img_preprocess(img)
             return img
 
         return np.array([img_read(file_name) for file_name in batch_x]), \
