@@ -33,10 +33,11 @@ def extract_size(largest_contour):
 
 def extract_object_from_image(model, image, output_size=(1500, 1500)):
     transformed_image = calculate_input_image(image)
+    transformed_image = np.array(transformed_image/256)
     predicted_mask = model.predict(transformed_image)[0]
 
     # Threshold
-    predicted_mask[predicted_mask >= 0.9] = 1
+    predicted_mask[predicted_mask >= 0.8] = 1
     predicted_mask[predicted_mask < 0.8] = 0
 
     # Resize to original size
