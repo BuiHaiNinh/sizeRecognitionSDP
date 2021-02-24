@@ -21,8 +21,13 @@ class DataGenerator(keras.utils.Sequence):
         batch_x = [self.x[index] for index in indexes]
         batch_y = [self.y[index] for index in indexes]
 
+        def normalize(x):
+            return np.array(x/256)
+
         def img_read(path):
-            return imread(path)
+            img = imread(path)
+            img = normalize(img)
+            return img
 
         return np.array([img_read(file_name) for file_name in batch_x]), \
                np.array([img_read(file_name) for file_name in batch_y])

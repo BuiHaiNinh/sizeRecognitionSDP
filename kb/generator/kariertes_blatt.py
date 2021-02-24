@@ -48,13 +48,14 @@ def get_unter_data_generator(data_path, k_validation=0.2, shuffle=True):
     return __get_data_generator(data_path1, data_path2, k_validation=k_validation, shuffle=shuffle)
 
 
-def __get_data_objects_generator(data_path_1, data_path_2, k_validation=0.2, shuffle=True, classes=None):
+def get_data_objects_generator(data_path_1, data_path_2, k_validation=0.2, shuffle=True, classes=None,
+                               extract_class_func=extract_class):
     images1_mask = [file for file in glob.glob(data_path_1, recursive=True)]
     images2_mask = [file for file in glob.glob(data_path_2, recursive=True)]
 
     images_mask = images1_mask + images2_mask
     if classes is None:
-        classes = list(set([extract_class(image) for image in images_mask]))
+        classes = list(set([extract_class_func(image) for image in images_mask]))
 
     if shuffle:
         random.shuffle(images_mask)
@@ -63,24 +64,24 @@ def __get_data_objects_generator(data_path_1, data_path_2, k_validation=0.2, shu
 
     n_validation = int(len(images_mask) * k_validation)
 
-    return (DataObjectsGenerator(x_set=image[:n_validation], classes=classes),
-            DataObjectsGenerator(x_set=image[n_validation:], classes=classes),
+    return (DataObjectsGenerator(x_set=image[:n_validation], classes=classes, extract_class_func=extract_class_func),
+            DataObjectsGenerator(x_set=image[n_validation:], classes=classes, extract_class_func=extract_class_func),
             classes)
 
 
 def get_oben_data_objects_generator(data_path, k_validation=0.2, shuffle=True, classes=None):
     data_path1 = data_path + "/Kegelstift/**/oben/**/*_s256*.JPG"
     data_path2 = data_path + "/Zylinderstift/**/oben/**/*_s256*.JPG"
-    return __get_data_objects_generator(data_path1, data_path2, k_validation, shuffle, classes)
+    return get_data_objects_generator(data_path1, data_path2, k_validation, shuffle, classes)
 
 
 def get_seite_data_objects_generator(data_path, k_validation=0.2, shuffle=True, classes=None):
     data_path1 = data_path + "/Kegelstift/**/Seite/**/*_s256*.JPG"
     data_path2 = data_path + "/Zylinderstift/**/Seite/**/*_s256*.JPG"
-    return __get_data_objects_generator(data_path1, data_path2, k_validation, shuffle, classes)
+    return get_data_objects_generator(data_path1, data_path2, k_validation, shuffle, classes)
 
 
 def get_unter_data_objects_generator(data_path, k_validation=0.2, shuffle=True, classes=None):
     data_path1 = data_path + "/Kegelstift/**/unten/**/*_s256*.JPG"
     data_path2 = data_path + "/Zylinderstift/**/unten/**/*_s256*.JPG"
-    return __get_data_objects_generator(data_path1, data_path2, k_validation, shuffle, classes)
+    return get_data_objects_generator(data_path1, data_path2, k_validation, shuffle, classes)

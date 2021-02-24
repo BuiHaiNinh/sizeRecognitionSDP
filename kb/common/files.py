@@ -23,7 +23,7 @@ def delete_files(file_pattern, targets):
     return images
 
 
-def files(file_pattern, targets=None):
+def files(file_pattern, targets=None, ignore=False):
     """
     Get all image path
     :param file_pattern: a string. Example: '../data_objects/**/*.JPG'
@@ -31,7 +31,10 @@ def files(file_pattern, targets=None):
     :return:
     """
     def images_filter_func(file):
-        return any(target in file for target in targets)
+        if ignore:
+            return not any(target in file for target in targets)
+        else:
+            return any(target in file for target in targets)
 
     if targets:
         images = [file for file in glob.glob(file_pattern, recursive=True) if (images_filter_func(file))]
